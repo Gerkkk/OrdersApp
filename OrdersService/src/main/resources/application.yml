@@ -1,0 +1,23 @@
+spring:
+    application:
+        name: OrdersService
+    datasource:
+        url: jdbc:postgresql://orders-postgres:5432/orders_db
+        username: orders
+        password: orders
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        how-sql: false
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                format_sql: true
+    liquibase:
+        enabled: false
+grpc:
+    server:
+        address: 0.0.0.0
+        port: 9090
+        negotiationType: PLAINTEXT

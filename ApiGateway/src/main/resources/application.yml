@@ -1,0 +1,21 @@
+spring:
+    application:
+        name: ApiGateway
+
+server:
+    port: 8080
+
+springdoc:
+    swagger-ui:
+        enabled: true
+    api-docs:
+        enabled: true
+
+grpc:
+    client:
+        orders-service:
+            address: "orders-service:9090"
+            negotiationType: PLAINTEXT
+        payment-service:
+            address: "payment-service:9090"
+            negotiationType: PLAINTEXT
