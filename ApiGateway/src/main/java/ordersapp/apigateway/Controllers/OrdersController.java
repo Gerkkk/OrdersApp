@@ -43,6 +43,7 @@ public class OrdersController {
     public ResponseEntity<GetOrdersListResponse> getOrdersList(@PathVariable("id") long id) {
         try {
             GetOrdersListResponse response = new GetOrdersListResponse(orderService.getOrdersByUserId(id));
+            System.out.println("rer: " + response);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ConnectException e) {
             return ResponseEntity.status(503).build();

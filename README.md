@@ -11,3 +11,4 @@ make service-up #запуск всего приложения
 
 http://localhost:8081/swagger-ui/index.html#/ - ссылка на Swagger\
 http://localhost:8085/ui/clusters/local/brokers - Kafka
+http://localhost:3000 - web

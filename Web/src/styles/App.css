@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    color: #444;
+}
+
+html, body {
+    height: 100%;
+}
+

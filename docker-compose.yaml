@@ -80,44 +80,6 @@ services:
     networks:
       - app-network
 
-  inbox-postgres:
-    image: postgres:15-alpine
-    container_name: inb_db
-    environment:
-      POSTGRES_DB: inb_db
-      POSTGRES_USER: inb
-      POSTGRES_PASSWORD: inb
-    volumes:
-      - inb_postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5435:5432"
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U inb -d inb_db" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
-
-  outbox-postgres:
-    image: postgres:15-alpine
-    container_name: outb_db
-    environment:
-      POSTGRES_DB: outb_db
-      POSTGRES_USER: outb
-      POSTGRES_PASSWORD: outb
-    volumes:
-      - outb_postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5436:5432"
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U outb -d outb_db" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
-
   api-gateway:
     build:
       context: ./ApiGateway
@@ -148,6 +110,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9094:9090"
+    networks:
+      - app-network
+  frontend:
+    build:
+      context: ./Web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
     networks:
       - app-network
 

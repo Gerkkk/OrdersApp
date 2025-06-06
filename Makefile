@@ -9,3 +9,7 @@ service-up:
 
 service-down:
 	docker-compose -f docker-compose.yaml down
+
+service-rerun:
+	docker-compose -f docker-compose.yaml down
+	docker-compose -f docker-compose.yaml up -d --build

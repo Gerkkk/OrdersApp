@@ -16,6 +16,22 @@ spring:
                 format_sql: true
     liquibase:
         enabled: false
+
+    kafka:
+        bootstrap-servers: localhost:29092
+        properties:
+            security.protocol: PLAINTEXT
+        admin:
+            auto-create-topics: true
+        consumer:
+            group-id: orders
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+            properties:
+                spring.json.trusted.packages: "ordersapp.ordersservice,java.util,java.lang"
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 grpc:
     server:
         address: 0.0.0.0

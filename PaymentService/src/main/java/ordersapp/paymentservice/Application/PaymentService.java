@@ -19,7 +19,7 @@ public class PaymentService implements AccountServiceI {
         var account = accountRepository.findByUserId(accountId);
 
         if (account == null) {
-            return null;
+            return BigDecimal.valueOf(-1);
         } else {
             return account.getBalance();
         }
