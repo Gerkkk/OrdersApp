@@ -3,6 +3,7 @@ import { getOrders } from '../api';
 import Header from '../components/Header';
 import OrderForm from '../components/OrderForm';
 import OrderTable from "../components/OrderTable";
+import {useOrdersStatusSocket} from "../hooks/useOrdersStatusSocket"
 import '../styles/Form.css';
 
 const OrdersPage = ({ userId }) => {
@@ -16,6 +17,8 @@ const OrdersPage = ({ userId }) => {
     useEffect(() => {
         loadOrders();
     }, []);
+
+    useOrdersStatusSocket(orders);
 
     return (
         <div>

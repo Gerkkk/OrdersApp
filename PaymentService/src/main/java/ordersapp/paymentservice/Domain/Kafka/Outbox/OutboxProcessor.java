@@ -1,12 +1,11 @@
-package ordersapp.ordersservice.Domain.Kafka.Outbox;
+package ordersapp.paymentservice.Domain.Kafka.Outbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ordersapp.ordersservice.Domain.Interfaces.Repositories.OutboxEventRepositoryI;
-import ordersapp.ordersservice.Domain.Kafka.Events.PaymentRequiredEvent;
-import ordersapp.ordersservice.Domain.Kafka.Producers.PaymentRequiredProducer;
+import ordersapp.paymentservice.Domain.Interfaces.Repositories.PaymentResultRepositoryI;
+import ordersapp.paymentservice.Domain.Kafka.Events.PaymentResultEvent;
+import ordersapp.paymentservice.Domain.Kafka.Producers.PaymentResultProducer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +13,17 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OutboxProcessor {
-    private final PaymentRequiredProducer kafkaProducer;
-    private final OutboxEventRepositoryI outboxEventRepository;
+    private final PaymentResultProducer kafkaProducer;
+    private final PaymentResultRepositoryI outboxEventRepository;
     private final ObjectMapper objectMapper;
 
     @Scheduled(fixedDelay = 1000)
-    @Transactional
     public void process() {
         var outboxEvents = outboxEventRepository.findAllBySentFalseOrderByCreatedAtAsc();
 
         for (var outboxEvent : outboxEvents) {
             try {
-                var mapped = objectMapper.readValue(outboxEvent.getPayload(), PaymentRequiredEvent.class);
+                var mapped = objectMapper.readValue(outboxEvent.getPayload(), PaymentResultEvent.class);
                 kafkaProducer.sendPaymentRequest(mapped);
                 outboxEvent.setSent(true);
                 outboxEventRepository.save(outboxEvent);

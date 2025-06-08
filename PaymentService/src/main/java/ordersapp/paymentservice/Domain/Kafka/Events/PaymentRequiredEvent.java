@@ -1,4 +1,4 @@
-package ordersapp.ordersservice.Domain.Kafka.Events;
+package ordersapp.paymentservice.Domain.Kafka.Events;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

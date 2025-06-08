@@ -18,20 +18,17 @@ spring:
         enabled: false
 
     kafka:
-        bootstrap-servers: localhost:29092
-        properties:
-            security.protocol: PLAINTEXT
-        admin:
-            auto-create-topics: true
-        consumer:
-            group-id: orders
-            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-            properties:
-                spring.json.trusted.packages: "ordersapp.ordersservice,java.util,java.lang"
+        bootstrap-servers: kafka:9092
         producer:
             key-serializer: org.apache.kafka.common.serialization.StringSerializer
-            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+        consumer:
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    redis:
+        host: localhost
+        port: 6379
+
 grpc:
     server:
         address: 0.0.0.0
