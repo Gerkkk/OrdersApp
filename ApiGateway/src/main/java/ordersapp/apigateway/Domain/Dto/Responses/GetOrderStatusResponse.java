@@ -10,7 +10,6 @@ public class GetOrderStatusResponse {
     private OrderStatus orderStatus;
 
     public GetOrderStatusResponse (String status) {
-        System.out.println("LOL: " + status + " " + status.toUpperCase());
         orderStatus = OrderStatus.valueOf(status.toUpperCase());
     }
 }
