@@ -103,6 +103,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9093:9090"
+      - "9095:8080"
     networks:
       - app-network
   payment-service:

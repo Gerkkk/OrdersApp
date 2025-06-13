@@ -35,12 +35,15 @@ public class PaymentResultConsumer {
             var order = orderOptional.get();
             if (event.isSuccessful()) {
                 order.setStatus(OrderStatus.FINISHED);
+                ordersService.updateOrder(order);
                 orderStatusPublisher.publishStatusUpdate(String.valueOf(order.getId()), OrderStatus.FINISHED.name());
             } else {
                 order.setStatus(OrderStatus.CANCELLED);
+                ordersService.updateOrder(order);
+                System.out.println("Order " + order.getId() + " cancelled");
                 orderStatusPublisher.publishStatusUpdate(String.valueOf(order.getId()), OrderStatus.CANCELLED.name());
             }
-            ordersService.updateOrder(order);
+
         } catch (Exception e) {
             System.out.println("Failed to serialize customer event " + e.getMessage());
         }

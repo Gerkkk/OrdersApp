@@ -1,6 +1,8 @@
 package ordersapp.ordersservice.Presentation;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -12,7 +14,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+@Controller
+@RequiredArgsConstructor
 public class WebSocketController extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> orderSessions = new ConcurrentHashMap<>();
@@ -30,6 +33,7 @@ public class WebSocketController extends TextWebSocketHandler {
     }
 
     public void sendStatusUpdate(String orderId, String status) {
+        System.out.println("Sending status update to order: " + orderId + " status: " + status);
         WebSocketSession session = orderSessions.get(orderId);
         if (session != null && session.isOpen()) {
             try {
@@ -37,6 +41,8 @@ public class WebSocketController extends TextWebSocketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            System.out.println("Connection fOrder " + orderId + " not found");
         }
     }
 

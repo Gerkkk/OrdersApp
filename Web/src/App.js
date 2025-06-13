@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import OrdersPage from './pages/OrdersPage';
 import AccountPage from './pages/AccountPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles/App.css';
-
 
 const App = () => {
     const [userId, setUserId] = useState('');
@@ -16,6 +17,7 @@ const App = () => {
                 <Route path="/orders" element={<OrdersPage userId={userId} />} />
                 <Route path="/account" element={<AccountPage userId={userId} />} />
             </Routes>
+            <ToastContainer />
         </Router>
     );
 };

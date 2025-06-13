@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { getOrders } from '../api';
 import Header from '../components/Header';
 import OrderForm from '../components/OrderForm';
 import OrderTable from "../components/OrderTable";
-import {useOrdersStatusSocket} from "../hooks/useOrdersStatusSocket"
 import '../styles/Form.css';
 
 const OrdersPage = ({ userId }) => {
     const [orders, setOrders] = useState([]);
 
-    const loadOrders = async () => {
-        const data = await getOrders(userId);
-        setOrders(data.orders);
-    };
+    const loadOrders = useCallback(async () => {
+        try {
+            const data = await getOrders(userId);
+            setOrders(data.orders || []);
+        } catch (error) {
+            console.error("Failed to load orders:", error);
+            setOrders([]);
+        }
+    }, [userId]);
 
     useEffect(() => {
         loadOrders();
-    }, []);
-
-    useOrdersStatusSocket(orders);
+    }, [loadOrders]);
 
     return (
         <div>
