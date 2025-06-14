@@ -3,6 +3,7 @@ package ordersapp.ordersservice.Application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ordersapp.ordersservice.Domain.Entities.Order;
 import ordersapp.ordersservice.Domain.Enums.OrderStatus;
 import ordersapp.ordersservice.Domain.Interfaces.Repositories.OrdersRepositoryI;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OrdersService implements OrdersServiceI {
     private final OrdersRepositoryI ordersRepository;
     private final OutboxEventRepositoryI outboxEventRepository;
@@ -33,7 +35,7 @@ public class OrdersService implements OrdersServiceI {
         try {
             outboxEvent.setPayload(objectMapper.writeValueAsString(event));
         } catch (Exception e) {
-            throw new InternalException("Failed to serialize customer event");
+            log.error("Failed to serialize customer event: {}", e.getMessage());
         }
 
         outboxEventRepository.save(outboxEvent);

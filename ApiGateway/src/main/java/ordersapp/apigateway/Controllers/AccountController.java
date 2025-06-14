@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ordersapp.apigateway.Domain.Dto.Requests.CreateOrderRequest;
 import ordersapp.apigateway.Domain.Dto.Requests.DepositRequest;
 import ordersapp.apigateway.Domain.Dto.Responses.GetOrderStatusResponse;
@@ -20,6 +21,7 @@ import java.rmi.ConnectException;
 @RestController
 @RequestMapping("/api/accounts")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Счета", description = "Запросы для создания платежного счета, пополнения счета, получения информации о счетах")
 public class AccountController {
     private final AccountsServiceI accountService;
@@ -33,7 +35,7 @@ public class AccountController {
         } catch (ConnectException e) {
             return ResponseEntity.status(503).build();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error("Get Balance exception: {}",e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -47,7 +49,7 @@ public class AccountController {
         } catch (ConnectException e) {
             return ResponseEntity.status(503).build();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error("Create account exception: {}",e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
@@ -61,7 +63,7 @@ public class AccountController {
         } catch (ConnectException e) {
             return ResponseEntity.status(503).build();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error("Deposit exception: {}",e.getMessage());
             return ResponseEntity.status(500).build();
         }
 

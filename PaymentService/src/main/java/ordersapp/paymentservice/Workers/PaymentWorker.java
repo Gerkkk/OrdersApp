@@ -3,6 +3,7 @@ package ordersapp.paymentservice.Workers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ordersapp.paymentservice.Domain.Interfaces.Repositories.PaymentRequestRepositoryI;
 import ordersapp.paymentservice.Domain.Interfaces.Repositories.PaymentResultRepositoryI;
 import ordersapp.paymentservice.Domain.Interfaces.Services.AccountServiceI;
@@ -19,6 +20,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentWorker {
     private final AccountServiceI accountService;
     private final PaymentRequestRepositoryI paymentRequestRepository;
@@ -57,12 +59,12 @@ public class PaymentWorker {
                 try {
                     outboxEvent.setPayload(objectMapper.writeValueAsString(event));
                 } catch (Exception e) {
-                    throw new InternalException("Failed to serialize customer event");
+                    log.error("Failed to serialize customer event{}", e.getMessage());
                 }
 
                 paymentResultRepository.save(outboxEvent);
             } catch (Exception e) {
-                System.out.println("Error while reading payment request from kafka: " + e.getMessage());
+                log.error("Error while reading payment request from kafka: {}", e.getMessage());
             }
         }
     }

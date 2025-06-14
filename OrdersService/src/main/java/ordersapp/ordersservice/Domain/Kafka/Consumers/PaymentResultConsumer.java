@@ -2,21 +2,19 @@ package ordersapp.ordersservice.Domain.Kafka.Consumers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ordersapp.ordersservice.Application.OrdersService;
 import ordersapp.ordersservice.Domain.Enums.OrderStatus;
 import ordersapp.ordersservice.Domain.Kafka.Events.PaymentResultEvent;
 import ordersapp.ordersservice.Domain.Redis.OrderStatusPublisher;
-import ordersapp.ordersservice.Presentation.WebSocketController;
-import org.apache.logging.log4j.util.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 
-//TODO: Add websocket logic
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@Slf4j
 public class PaymentResultConsumer {
     private final OrderStatusPublisher orderStatusPublisher;
     private final OrdersService ordersService;
@@ -40,12 +38,11 @@ public class PaymentResultConsumer {
             } else {
                 order.setStatus(OrderStatus.CANCELLED);
                 ordersService.updateOrder(order);
-                System.out.println("Order " + order.getId() + " cancelled");
                 orderStatusPublisher.publishStatusUpdate(String.valueOf(order.getId()), OrderStatus.CANCELLED.name());
             }
 
         } catch (Exception e) {
-            System.out.println("Failed to serialize customer event " + e.getMessage());
+            log.error("Failed to serialize customer event: {}",e.getMessage());
         }
     }
 }

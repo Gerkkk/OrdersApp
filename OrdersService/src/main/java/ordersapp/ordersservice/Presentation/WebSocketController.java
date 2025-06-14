@@ -1,7 +1,7 @@
 package ordersapp.ordersservice.Presentation;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class WebSocketController extends TextWebSocketHandler {
 
     private final Map<String, WebSocketSession> orderSessions = new ConcurrentHashMap<>();
@@ -23,7 +24,7 @@ public class WebSocketController extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         String orderId = getOrderIdFromQuery(session);
-        System.out.println("Connection established: " + orderId);
+        log.info("Connection established for {}", orderId);
         orderSessions.put(orderId, session);
     }
 
@@ -33,16 +34,15 @@ public class WebSocketController extends TextWebSocketHandler {
     }
 
     public void sendStatusUpdate(String orderId, String status) {
-        System.out.println("Sending status update to order: " + orderId + " status: " + status);
         WebSocketSession session = orderSessions.get(orderId);
         if (session != null && session.isOpen()) {
             try {
                 session.sendMessage(new TextMessage(status));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Error sending message to order: {}; status: {}", orderId, status);
             }
         } else {
-            System.out.println("Connection fOrder " + orderId + " not found");
+            log.error("Connection for Order {} not found", orderId);
         }
     }
 

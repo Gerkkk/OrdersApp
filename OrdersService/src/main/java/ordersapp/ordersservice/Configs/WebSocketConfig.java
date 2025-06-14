@@ -12,14 +12,12 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration
 @EnableWebSocket
 @RequiredArgsConstructor
-@Slf4j
 public class WebSocketConfig implements WebSocketConfigurer {
     private final WebSocketController webSocketController;
 
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        log.info("Registering websocket handlers");
         registry.addHandler(webSocketController, "/ws/order-status")
                 .setAllowedOrigins("*");
     }

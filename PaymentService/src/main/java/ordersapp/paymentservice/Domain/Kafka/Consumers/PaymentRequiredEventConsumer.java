@@ -2,6 +2,7 @@ package ordersapp.paymentservice.Domain.Kafka.Consumers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ordersapp.paymentservice.Domain.Interfaces.Repositories.PaymentRequestRepositoryI;
 import ordersapp.paymentservice.Domain.Kafka.Events.PaymentRequiredEvent;
 import ordersapp.paymentservice.Domain.Kafka.Inbox.InboxEvent;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentRequiredEventConsumer {
     private final PaymentRequestRepositoryI paymentRequestRepository;
     private final ObjectMapper objectMapper;
@@ -27,7 +29,7 @@ public class PaymentRequiredEventConsumer {
             inboxEvent.setCreatedAt(LocalDateTime.now());
             inboxEvent.setPayload(json);
         } catch (Exception e) {
-            throw new InternalException("Failed to serialize customer event");
+            log.error("Failed to deserialize customer event{}", e.getMessage());
         }
 
         paymentRequestRepository.save(inboxEvent);

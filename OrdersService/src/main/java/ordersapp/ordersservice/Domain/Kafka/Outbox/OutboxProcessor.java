@@ -30,7 +30,7 @@ public class OutboxProcessor {
                 outboxEvent.setSent(true);
                 outboxEventRepository.save(outboxEvent);
             } catch (Exception e) {
-                System.out.println("Error while sending payment request via kafka: " + e.getMessage());
+                log.error("Error while sending payment request via kafka: {}", e.getMessage());
             }
         }
     }
